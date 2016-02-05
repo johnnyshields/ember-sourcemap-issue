@@ -11,7 +11,7 @@ module.exports = function(defaults) {
   app.import('bower_components/sprintf/dist/sprintf.min.js');
 
   // This is not the problem
-  app.import('bower_components/bootstrap/js/modal.js');
+  app.import('bower_components/bootstrap/dist/js/bootstrap.js');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.
