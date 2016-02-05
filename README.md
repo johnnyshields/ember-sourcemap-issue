@@ -1,53 +1,60 @@
 # Ember-sourcemap-issue
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+This repo demonstrates https://github.com/ember-cli/ember-cli-uglify/issues/4
 
-## Prerequisites
+To reproduce the issue, run:
 
-You will need the following things properly installed on your computer.
+```
+ember build -e production
+```
 
-* [Git](http://git-scm.com/)
-* [Node.js](http://nodejs.org/) (with NPM)
-* [Bower](http://bower.io/)
-* [Ember CLI](http://www.ember-cli.com/)
-* [PhantomJS](http://phantomjs.org/)
+You should see this error:
 
-## Installation
+```
+C:\workspace\ember-sourcemap-issue>ember build -e production
+version: 1.13.15
+Build failed.
+File: assets/vendor.js
+Invalid mapping: {"generated":{"line":85544,"column":-3029},"source":"bower_comp
+onents/bootstrap/js/modal.js","original":{"line":1,"column":0},"name":null}
+Error: Invalid mapping: {"generated":{"line":85544,"column":-3029},"source":"bow
+er_components/bootstrap/js/modal.js","original":{"line":1,"column":0},"name":nul
+l}
+    at SourceMapGenerator_validateMapping [as _validateMapping] (C:\workspace\em
+ber-sourcemap-issue\node_modules\ember-cli-uglify\node_modules\broccoli-uglify-s
+ourcemap\node_modules\uglify-js\node_modules\source-map\lib\source-map-generator
+.js:271:15)
+    at SourceMapGenerator_addMapping [as addMapping] (C:\workspace\ember-sourcem
+ap-issue\node_modules\ember-cli-uglify\node_modules\broccoli-uglify-sourcemap\no
+de_modules\uglify-js\node_modules\source-map\lib\source-map-generator.js:101:14)
 
-* `git clone <repository-url>` this repository
-* change into the new directory
-* `npm install`
-* `bower install`
+    at C:\workspace\ember-sourcemap-issue\node_modules\ember-cli-uglify\node_mod
+ules\broccoli-uglify-sourcemap\node_modules\uglify-js\node_modules\source-map\li
+b\source-map-generator.js:72:19
+    at Array.forEach (native)
+    at SourceMapConsumer_eachMapping [as eachMapping] (C:\workspace\ember-source
+map-issue\node_modules\ember-cli-uglify\node_modules\broccoli-uglify-sourcemap\n
+ode_modules\uglify-js\node_modules\source-map\lib\source-map-consumer.js:155:16)
 
-## Running / Development
+    at Function.SourceMapGenerator_fromSourceMap (C:\workspace\ember-sourcemap-i
+ssue\node_modules\ember-cli-uglify\node_modules\broccoli-uglify-sourcemap\node_m
+odules\uglify-js\node_modules\source-map\lib\source-map-generator.js:48:26)
+    at Object.SourceMap (eval at <anonymous> (C:\workspace\ember-sourcemap-issue
+\node_modules\ember-cli-uglify\node_modules\broccoli-uglify-sourcemap\node_modul
+es\uglify-js\tools\node.js:24:4), <anonymous>:7575:52)
+    at Object.exports.minify (C:\workspace\ember-sourcemap-issue\node_modules\em
+ber-cli-uglify\node_modules\broccoli-uglify-sourcemap\node_modules\uglify-js\too
+ls\node.js:102:38)
+    at UglifyWriter.processFile (C:\workspace\ember-sourcemap-issue\node_modules
+\ember-cli-uglify\node_modules\broccoli-uglify-sourcemap\index.js:118:27)
+    at C:\workspace\ember-sourcemap-issue\node_modules\ember-cli-uglify\node_mod
+ules\broccoli-uglify-sourcemap\index.js:62:16
+```
 
-* `ember server`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+Note that removing the following line from `ember-cli-build.js` fixes the issue:
 
-### Code Generators
+```
+  app.import('bower_components/sprintf/dist/sprintf.min.js');
+```
 
-Make use of the many generators for code, try `ember help generate` for more details
-
-### Running Tests
-
-* `ember test`
-* `ember test --server`
-
-### Building
-
-* `ember build` (development)
-* `ember build --environment production` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [ember.js](http://emberjs.com/)
-* [ember-cli](http://www.ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
-
+(The error message is cryptic because sprintf, NOT bootstrap is the problem)

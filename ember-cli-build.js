@@ -7,7 +7,11 @@ module.exports = function(defaults) {
     sourcemaps: { enabled: true, extensions: ['js','css'] }
   });
 
-  app.import('bower_components/select2/select2.js');
+  // This lib causes the issue
+  app.import('bower_components/sprintf/dist/sprintf.min.js');
+
+  // This is not the problem
+  app.import('bower_components/bootstrap/js/modal.js');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.
